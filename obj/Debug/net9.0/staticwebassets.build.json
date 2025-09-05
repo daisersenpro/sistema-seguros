@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "Y8qLvnNoPX17B7u3TJoKxGxjoK0A/rHCGa8VonZed38=",
+  "Source": "ApiSeguros",
+  "BasePath": "_content/ApiSeguros",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
