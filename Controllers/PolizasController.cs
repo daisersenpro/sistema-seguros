@@ -3,8 +3,11 @@ using ApiSeguros.Models;
 
 namespace ApiSeguros.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
+
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class PolizasController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -54,8 +57,9 @@ namespace ApiSeguros.Controllers
         }
 
         // DELETE: api/polizas/{id}
-        [HttpDelete("{id}")]
-        public IActionResult Eliminar(int id)
+    [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
+    public IActionResult Eliminar(int id)
         {
             var poliza = _context.Polizas.Find(id);
             if (poliza == null)

@@ -2,6 +2,27 @@ using Microsoft.EntityFrameworkCore;
 using ApiSeguros;
 
 var builder = WebApplication.CreateBuilder(args);
+// Swagger para documentación de la API
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+// Configuración de JWT
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = "JwtBearer";
+    options.DefaultChallengeScheme = "JwtBearer";
+})
+    .AddJwtBearer("JwtBearer", options =>
+    {
+        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("SuperSecretKeySeguros2025")),
+            ClockSkew = TimeSpan.Zero
+        };
+    });
 
 // Add services to the container.
 
@@ -23,11 +44,14 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+// Habilitar autenticación
+app.UseAuthentication();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 // Usar CORS antes de otros middlewares
