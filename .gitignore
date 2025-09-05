@@ -1,0 +1,30 @@
+# .NET Core
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.vs/
+.vscode/
+# Logs
+*.log
+# OS generated files
+.DS_Store
+Thumbs.db
+# Visual Studio
+.vs/
+# NuGet
+*.nupkg
+# Build Results
+[Dd]ebug/
+[Rr]elease/
+# Others
+*.dbmdl
+*.pdb
+*.cache
+*.ide
+# Entity Framework
+Migrations/
+# Sensitive files
+appsettings.Development.json

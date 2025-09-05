@@ -22,6 +22,34 @@ namespace ApiSeguros.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("ApiSeguros.Models.Cliente", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Telefono")
+                        .HasColumnType("text");
+
+                    b.Property<int>("VendedorId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VendedorId");
+
+                    b.ToTable("Clientes");
+                });
+
             modelBuilder.Entity("ApiSeguros.Models.Poliza", b =>
                 {
                     b.Property<int>("Id")
@@ -29,6 +57,9 @@ namespace ApiSeguros.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("FechaFin")
                         .HasColumnType("timestamp with time zone");
@@ -47,9 +78,38 @@ namespace ApiSeguros.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("VendedorId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("ClienteId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.HasIndex("VendedorId");
+
                     b.ToTable("Polizas");
+                });
+
+            modelBuilder.Entity("ApiSeguros.Models.TipoUsuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TiposUsuario");
                 });
 
             modelBuilder.Entity("ApiSeguros.Models.Usuario", b =>
@@ -71,9 +131,73 @@ namespace ApiSeguros.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("TipoUsuarioId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("TipoUsuarioId");
+
                     b.ToTable("Usuarios");
+                });
+
+            modelBuilder.Entity("ApiSeguros.Models.Cliente", b =>
+                {
+                    b.HasOne("ApiSeguros.Models.Usuario", "Vendedor")
+                        .WithMany()
+                        .HasForeignKey("VendedorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Vendedor");
+                });
+
+            modelBuilder.Entity("ApiSeguros.Models.Poliza", b =>
+                {
+                    b.HasOne("ApiSeguros.Models.Cliente", "Cliente")
+                        .WithMany("Polizas")
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ApiSeguros.Models.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ApiSeguros.Models.Usuario", "Vendedor")
+                        .WithMany()
+                        .HasForeignKey("VendedorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+
+                    b.Navigation("Usuario");
+
+                    b.Navigation("Vendedor");
+                });
+
+            modelBuilder.Entity("ApiSeguros.Models.Usuario", b =>
+                {
+                    b.HasOne("ApiSeguros.Models.TipoUsuario", "TipoUsuario")
+                        .WithMany("Usuarios")
+                        .HasForeignKey("TipoUsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TipoUsuario");
+                });
+
+            modelBuilder.Entity("ApiSeguros.Models.Cliente", b =>
+                {
+                    b.Navigation("Polizas");
+                });
+
+            modelBuilder.Entity("ApiSeguros.Models.TipoUsuario", b =>
+                {
+                    b.Navigation("Usuarios");
                 });
 #pragma warning restore 612, 618
         }

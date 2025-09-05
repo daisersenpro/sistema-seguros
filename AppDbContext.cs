@@ -9,5 +9,7 @@ namespace ApiSeguros
 
     public DbSet<Usuario> Usuarios { get; set; }
     public DbSet<Poliza> Polizas { get; set; }
+    public DbSet<TipoUsuario> TiposUsuario { get; set; }
+    public DbSet<Cliente> Clientes { get; set; }
     }
 }
